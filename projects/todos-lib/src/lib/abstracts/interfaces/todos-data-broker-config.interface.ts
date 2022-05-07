@@ -32,6 +32,12 @@ export type TodosDataBrokerConfig = IonUIDataBrokerConfig & {
       todos:IonUIDataBrokerUIPageConfig & {
         reconciliation:{
           intervalSecs:number,
+        },
+        behavior:{
+          todoInfo:{
+            progressMsg?:string,
+            successMsg?:string
+          }
         }
 
       }
@@ -61,7 +67,7 @@ export type TodosDataBrokerConfig = IonUIDataBrokerConfig & {
         },
 
         behavior:{
-          urlInfo:{
+          todoInfo:{
             progressMsg?:string,
             successMsg?:string,
             requiredValidationMsg?:string,

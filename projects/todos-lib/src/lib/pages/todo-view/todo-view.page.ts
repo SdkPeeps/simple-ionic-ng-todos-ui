@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Todo } from '../../abstracts/interfaces/todos.interface';
 import {NavController} from '@ionic/angular';
 import { TodosDataBroker } from '../../abstracts/interfaces/todos-data-broker';
-import { TodosDataBrokerServiceToken } from '../../abstracts/interfaces/todos-data-broker-config.interface';
+import { TodosDataBrokerServiceToken, TodosDataBrokerConfig } from '../../abstracts/interfaces/todos-data-broker-config.interface';
 import { Inject } from '@angular/core';
 
 @Component({
@@ -15,11 +15,14 @@ export class TodoViewPage implements OnInit {
 
   todo:Todo;
 
+config!: TodosDataBrokerConfig;
+
   constructor(@Inject(TodosDataBrokerServiceToken)
   private todosDataBroker:TodosDataBroker,private router:Router,private activatedRoute: ActivatedRoute,private navCtrl:NavController) {
+
+      this.config = this.todosDataBroker.getConfig();
     this.todo = this.router.getCurrentNavigation()?.extras.state?.todo;
   }
-
   shouldRenderUIContent(){
     return !!this.todo;
   }
@@ -48,9 +51,9 @@ export class TodoViewPage implements OnInit {
   forcedExit(){
     // show exit error toast
     this.todosDataBroker.showToast({
-      message: 
+      message: this.config.ui.pages.todos.crud?.update?.messages?.failure || 'Redirecting to homepage...'
     });
-    
+
     this.navCtrl.pop();
   }
 
