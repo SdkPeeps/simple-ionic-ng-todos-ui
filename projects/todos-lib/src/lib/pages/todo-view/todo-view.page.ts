@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Todo } from '../../abstracts/interfaces/todos.interface';
+import {NavController} from '@ionic/angular';
+import { TodosDataBroker } from '../../abstracts/interfaces/todos-data-broker';
+import { TodosDataBrokerServiceToken } from '../../abstracts/interfaces/todos-data-broker-config.interface';
+import { Inject } from '@angular/core';
 
 @Component({
   selector: 'app-todo-view',
@@ -8,18 +13,32 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TodoViewPage implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute) { }
+  todo:Todo;
+
+  constructor(@Inject(TodosDataBrokerServiceToken)
+  private todosDataBroker:TodosDataBroker,private router:Router,private activatedRoute: ActivatedRoute,private navCtrl:NavController) {
+    this.todo = this.router.getCurrentNavigation()?.extras.state?.todo;
+  }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(
       paramMap => {
-        if(!paramMap.has('todoId')) {
-          //redirect to hompage
-          return
+        if(!this.todo){
+          if(!paramMap.has('id')) {
+            this.forcedExit();
+            return;
+          }
+          const todoId = paramMap.get('id');
+          this.todosDataBroker.loadOne({
+            id:todoId,
+          })
         }
-        const todoId = paramMap.get('todoId')
       }
     )
+  }
+
+  forcedExit(){
+    this.navCtrl.pop();
   }
 
 }

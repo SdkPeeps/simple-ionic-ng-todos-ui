@@ -1,17 +1,25 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>todo-view</ion-title>
+    <ion-title>Todo Info</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-progress-bar *ngIf=""!todo></ion-progress-bar>
   <ion-card>
+
     <ion-card-header>
       <ion-label>
+
         <ion-card-title>{{todo.title}}</ion-card-title>
-        <ion-item>{{todo.status}}</ion-item>
+        <ion-item>
+          <todo-status></todo-status>
+        </ion-item>
+
+
       </ion-label>
     </ion-card-header>
+
     <ion-card-content>
       {{todo.description}}
     </ion-card-content>

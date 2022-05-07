@@ -12,6 +12,7 @@ import { TodosDataBrokerEvent } from '../../abstracts/interfaces/todos-data-brok
 import { ViewChild } from '@angular/core';
 import { TodosDataBrokerSearchConstraint } from '../../abstracts/interfaces/todos-data-broker-search-constraint.interface';
 import { TodosService } from '../../todos.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'todos-ui-todos-page',
@@ -89,7 +90,7 @@ export class TodosPage implements OnInit {
 
   constructor(@Inject(TodosDataBrokerServiceToken)
    private todosDataBroker:TodosDataBroker,
-    public modalCtlr: ModalController, public alertController: AlertController, private todosService: TodosService,
+    public modalCtlr: ModalController, public alertController: AlertController, private router: Router,
     public actionSheetController: ActionSheetController) {
 
     this.config = this.todosDataBroker.getConfig();
@@ -160,7 +161,10 @@ export class TodosPage implements OnInit {
           return new Promise<RESULT<Todo,any>>((resolve,reject)=>{
 
             this.modalCtlr.create({
-              component: TodosDetailsEditorPage
+              component: TodosDetailsEditorPage,
+              componentProps:{
+                mode:CRUD.CREATE
+              }
             }).then((modal)=>{
               modal.onDidDismiss().then(async (resp)=>{
 
@@ -234,13 +238,71 @@ export class TodosPage implements OnInit {
     });
   }
 
-  async view(todo: Todo) {
-    
-  }
+    async view(todo: Todo) {
+      this.router.navigate(['todo-view'],{state:{
+        todo
+      },queryParams:{id:todo.id}});
+    }
 
-  async edit(todo: Todo) {
+    async edit(todo: Todo) {
 
-  }
+    const afterUpdateSubject = new Subject<Todo>();
+
+    afterUpdateSubject.subscribe({
+      next:(todo:Todo)=>{
+        this.listDataBrokerLoadUIManager.reflectDataIntoPaginatedDataManager( 'update' , todo );
+      }
+    });
+
+    const todosConfig = this.config.ui.pages.todos;
+
+    await this.todosDataBroker.runUpdateUIFlow({
+      input:{
+        get:async ()=>{
+
+          return new Promise<RESULT<Todo,any>>((resolve,reject)=>{
+
+            this.modalCtlr.create({
+              component: TodosDetailsEditorPage,
+              componentProps:{
+                mode:CRUD.UPDATE
+              }
+            }).then((modal)=>{
+              modal.onDidDismiss().then(async (resp)=>{
+
+                const result = resp.data as RESULT<Todo,any>;
+
+                resolve(result);
+              });
+              modal.present().then();
+            });
+          });
+        },
+        //progress message shown while the link is being created
+        messages:{
+          failure: todosConfig.crud?.update?.messages?.failure || 'Oops something went wrong, pls try again'
+        },
+      },
+      crudEvent:{
+        before:{
+          progress:{
+            title: 'Please wait...',
+            // spinner: this.config.spinner.type || 'bubbles',
+            message: this.config.ui.pages.todosDetailEditor.behavior.urlInfo.progressMsg ||'Updating your todo',
+          },
+        },
+                //progress message shown after the todo has been updated
+        after:{
+          subject: afterUpdateSubject,
+          messages:{
+            success:todosConfig.crud?.update?.messages?.success || 'Todo Updated successfully',
+            failure: todosConfig.crud?.update?.messages?.failure || 'Oops something went wrong, pls try again',
+          }
+        }
+      }
+    });
+
+    }
 
       /**Method creates a new todo. The logic is gotten from the data broker */
       onLoaderStateChange(s: any){

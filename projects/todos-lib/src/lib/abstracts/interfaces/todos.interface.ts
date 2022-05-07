@@ -4,5 +4,5 @@ export interface  Todo  {
   id:ID,
   title: string,
   description:string,
-  status: boolean
+  completed: boolean
 };

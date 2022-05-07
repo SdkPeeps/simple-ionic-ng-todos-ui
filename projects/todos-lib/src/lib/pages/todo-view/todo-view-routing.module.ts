@@ -5,8 +5,13 @@ import { TodoViewPage } from './todo-view.page';
 
 const routes: Routes = [
   {
-    path: ':todoId',
-    component: TodoViewPage
+    path: 'todo-view',
+    children:[
+      {
+        path:':id',
+        component: TodoViewPage
+      }
+    ]
   }
 ];
 

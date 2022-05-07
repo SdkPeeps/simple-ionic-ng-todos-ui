@@ -10,7 +10,6 @@ import { FormGroup, Validators, FormBuilder, AbstractControl, ValidationErrors }
 import { PAGE_SECTION_POSITION } from 'vicky-ionic-ng-lib';
 import { TodosService } from '../../todos.service';
 
-
 @Component({
   selector: 'todos-ui-todos-details-editor',
   templateUrl: './todos-details-editor.page.html',
@@ -43,8 +42,6 @@ export class TodosDetailsEditorPage implements OnInit {
     return this.mode == CRUD.CREATE ? this.addBtnText : this.editBtnText;
   }
 
-  //Property that stores the label of Confirm button
-  @Input() confirmBtnText!: string;
   //Property that stores the page title
   @Input() pageTitle!: string;
   //Property that stores a boolean value for showing or hiding the title
@@ -55,19 +52,11 @@ export class TodosDetailsEditorPage implements OnInit {
   @Input() validationMsg2!: string;
 
   todoForm!: FormGroup;
-  //Property that stores the results fetched from an api
-  result!:Todo;
-
-  stage:0|1 = 0;
 
 // getting the availble position for the button. It can either be in the footer or the main page
-  position = PAGE_SECTION_POSITION
+  position = PAGE_SECTION_POSITION;
 
-
-  constructor(@Inject(TodosDataBrokerServiceToken) private todosDataBroker:TodosDataBroker,public modalCtlr: ModalController,
-  private loadingCtrl: LoadingController,
-  private formBuilder: FormBuilder) {
-
+  constructor(@Inject(TodosDataBrokerServiceToken) private todosDataBroker:TodosDataBroker,public modalCtlr: ModalController,private formBuilder: FormBuilder) {
   }
 
    ngOnInit() {
@@ -84,8 +73,7 @@ export class TodosDetailsEditorPage implements OnInit {
     this.addBtnText = this.addBtnText || this.config.ui.pages.todosDetailEditor.buttons.main.backLabel || 'add';
     //Assigning a value to the back btn label. The value is gotten through @Input() or the config file. If no value is set, it will use the fallback label 'Back'
     this.editBtnText = this.editBtnText || this.config.ui.pages.todosDetailEditor.buttons.main.backLabel || 'edit';
-    //Assigning a value to the confirm btn label. The value is gotten through @Input() or the config file. If no value is set, it will use the fallback label 'Confirm'
-    this.confirmBtnText = this.confirmBtnText || this.config.ui.pages.todosDetailEditor.buttons.main.confirmLabel || 'confirm';
+
     //Assigning a value that determines if the page title should be shown or not. The value is gotten through @Input() or the config file.
     this.showTitle = this.showTitle || !this.config.ui.pages.todosDetailEditor.title.invisible;
 
@@ -113,46 +101,21 @@ export class TodosDetailsEditorPage implements OnInit {
   //This method performs a progress action when a user add a new url
   async next(){
 
-    const todosConfig = this.config.ui.pages.todos;
-
     /**
      * The url is stored in a vaiable and would be passed a parameter when a request is made to the API
      */
-    const url = this.todoForm.value.url;
+    const todo:Todo = {
+      id:null!,
+      title:this.todoForm.value.title,
+      description:this.todoForm.value.description,
+      completed:this.todoForm.value.completed
+    };
 
-    if(!url) return;
-
-    const loading = await this.loadingCtrl.create({
-      message: 'Loading url Info..',
-      spinner: 'bubbles',
-    });
-
-    // Progress loader is shown while result is being fetched
-    await loading.present();
-
+    await this.modalCtlr.dismiss({
+      reason:'success',
+      data:todo,
+    } as RESULT<Todo,any>);
   }
-
-  //This method is called when the user need to go back after entering a url
-  async back(){
-    this.stage = 0;
-    this.result = null!;
-  }
-
-  // This method is called when a user affirm that the info returned is correct
-  async confirm(){
-    if(this.stage == 1 ){
-
-      const todo:Todo = this.result;
-
-      if(todo){
-        await this.modalCtlr.dismiss({
-          reason:'success',
-          data:todo,
-        } as RESULT<Todo,any>);
-      }
-    }
-  }
-
 
   // Method to close the todos editor
   async close(){
