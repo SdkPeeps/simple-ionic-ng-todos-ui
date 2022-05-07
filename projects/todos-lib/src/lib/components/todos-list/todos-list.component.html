@@ -1,0 +1,10 @@
+
+<ion-list *ngFor="let todo of todos">
+  <todos-ui-todos-item
+  [todo]="todo"
+  (view)="viewFunc(todo)"
+  (edit)="editFunc(todo)"
+  (delete)="deleteFunc(todo)"
+  (actionSheetClicked)="actionSheetClickedFunc(todo)">
+</todos-ui-todos-item>
+</ion-list>
