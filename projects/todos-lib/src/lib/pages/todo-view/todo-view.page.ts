@@ -20,6 +20,10 @@ export class TodoViewPage implements OnInit {
     this.todo = this.router.getCurrentNavigation()?.extras.state?.todo;
   }
 
+  shouldRenderUIContent(){
+    return !!this.todo;
+  }
+
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(
       paramMap => {
@@ -28,16 +32,25 @@ export class TodoViewPage implements OnInit {
             this.forcedExit();
             return;
           }
-          const todoId = paramMap.get('id');
+          const todoId = paramMap.get('id') as string;
           this.todosDataBroker.loadOne({
             id:todoId,
-          })
+          }).then( (result)=>{
+            this.todo = result.data;
+          },()=>{
+            this.forcedExit();
+          } );
         }
       }
     )
   }
 
   forcedExit(){
+    // show exit error toast
+    this.todosDataBroker.showToast({
+      message: 
+    });
+    
     this.navCtrl.pop();
   }
 

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { TodoViewPageRoutingModule } from './todo-view-routing.module';
 
 import { TodoViewPage } from './todo-view.page';
+import { TodoStatusComponent } from '../../components/todo-status/todo-status.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { TodoViewPage } from './todo-view.page';
     IonicModule,
     TodoViewPageRoutingModule
   ],
-  declarations: [TodoViewPage]
+  declarations: [TodoViewPage,TodoStatusComponent]
 })
 export class TodoViewPageModule {}

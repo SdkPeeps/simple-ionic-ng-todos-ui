@@ -288,7 +288,7 @@ export class TodosPage implements OnInit {
           progress:{
             title: 'Please wait...',
             // spinner: this.config.spinner.type || 'bubbles',
-            message: this.config.ui.pages.todosDetailEditor.behavior.urlInfo.progressMsg ||'Updating your todo',
+            message: todosConfig.behavior.urlInfo.progressMsg ||'Updating your todo',
           },
         },
                 //progress message shown after the todo has been updated
