@@ -6,7 +6,12 @@
 
 <ion-content>
   <ion-progress-bar *ngIf="!todo"></ion-progress-bar>
+
+  <vicky-ionic-ng-loader [progressSpinnerType]="spinnerType" (stateChange)="onLoaderStateChange($event)">
+  </vicky-ionic-ng-loader>
+
   <ng-container *ngIf="shouldRenderUIContent()">
+
     <ion-card>
 
       <ion-card-header>

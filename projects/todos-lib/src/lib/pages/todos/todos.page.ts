@@ -142,7 +142,7 @@ export class TodosPage implements OnInit {
   }
 
   /**Method creates a new todo. The logic is gotten from the data broker */
-  async addNewtodo() {
+  async addNewTodo() {
 
     const afterCreateSubject = new Subject<Todo>();
 

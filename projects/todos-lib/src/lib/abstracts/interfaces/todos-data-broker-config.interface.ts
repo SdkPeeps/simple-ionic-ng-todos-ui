@@ -30,10 +30,21 @@ export type TodosDataBrokerConfig = IonUIDataBrokerConfig & {
      * contains the properties related to the todos page
      */
       todos:IonUIDataBrokerUIPageConfig & {
-        reconciliation:{
-          intervalSecs:number,
-        },
         behavior:{
+          todoInfo:{
+            progressMsg?:string,
+            successMsg?:string
+          }
+        }
+
+      }
+      todosViewsPage:IonUIDataBrokerUIPageConfig & {
+        behavior:{
+          exit?:{
+          crash?:{
+              message?:string
+            }
+          }
           todoInfo:{
             progressMsg?:string,
             successMsg?:string

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Todo } from '../../abstracts/interfaces/todos.interface';
-import {NavController} from '@ionic/angular';
+import { NavController, SpinnerTypes } from '@ionic/angular';
 import { TodosDataBroker } from '../../abstracts/interfaces/todos-data-broker';
 import { TodosDataBrokerServiceToken, TodosDataBrokerConfig } from '../../abstracts/interfaces/todos-data-broker-config.interface';
 import { Inject } from '@angular/core';
+import { LoaderComponent, LOADER_STATE } from 'vicky-ionic-ng-lib';
 
 @Component({
   selector: 'app-todo-view',
@@ -17,6 +18,10 @@ export class TodoViewPage implements OnInit {
 
 config!: TodosDataBrokerConfig;
 
+@ViewChild(LoaderComponent,{static:true})
+  private loaderComponent!:LoaderComponent;
+  public spinnerType!: SpinnerTypes;
+
   constructor(@Inject(TodosDataBrokerServiceToken)
   private todosDataBroker:TodosDataBroker,private router:Router,private activatedRoute: ActivatedRoute,private navCtrl:NavController) {
 
@@ -28,11 +33,12 @@ config!: TodosDataBrokerConfig;
   }
 
   ngOnInit() {
+    this.spinnerType = this.config.ui.general.spinner.type || 'bubbles';
     this.activatedRoute.paramMap.subscribe(
       paramMap => {
         if(!this.todo){
           if(!paramMap.has('id')) {
-            this.forcedExit();
+            this.forcedExit(); //
             return;
           }
           const todoId = paramMap.get('id') as string;
@@ -48,10 +54,16 @@ config!: TodosDataBrokerConfig;
     )
   }
 
+   /**Method creates a new todo. The logic is gotten from the data broker */
+   onLoaderStateChange(s: any){
+    const state = s as unknown as LOADER_STATE;
+    console.log(s + ' as ' + state)
+}
+
   forcedExit(){
     // show exit error toast
     this.todosDataBroker.showToast({
-      message: this.config.ui.pages.todos.crud?.update?.messages?.failure || 'Redirecting to homepage...'
+      message: this.config.ui.pages.todosViewsPage.behavior.exit?.crash?.message || 'Oops something went wrong. Please try again'
     });
 
     this.navCtrl.pop();
