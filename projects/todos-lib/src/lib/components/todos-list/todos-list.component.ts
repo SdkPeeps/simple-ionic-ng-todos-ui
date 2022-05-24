@@ -1,5 +1,6 @@
 import { EventEmitter, Inject, Input, Output } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { ACTION_SHEET_FUNCTION } from 'app-base-lib';
 import { Todo } from '../../abstracts/interfaces/todos.interface';
 
 
@@ -9,11 +10,14 @@ import { Todo } from '../../abstracts/interfaces/todos.interface';
   styleUrls: ['./todos-list.component.scss']
 })
 export class TodosListComponent implements OnInit {
-  //Property to confirm if the user has access to delete
-  @Output() edit = new EventEmitter<any>();
-  @Output() delete = new EventEmitter<any>();
-  @Output() view = new EventEmitter<any>();
-  @Output() actionSheetClicked = new EventEmitter<any>();
+  
+  @Output() edit = new EventEmitter<Todo>();
+  @Output() delete = new EventEmitter<Todo>();
+  @Output() view = new EventEmitter<Todo>();
+
+  @Input() actionSheetFunction!:ACTION_SHEET_FUNCTION;
+
+  @Input() toastFunction!:TOAST_FUNCTION;
 
   @Input()
   deletable!:boolean;
@@ -29,17 +33,15 @@ export class TodosListComponent implements OnInit {
   ngOnInit() {
   }
 
-deleteFunc(todo: Todo) {
+  deleteFunc(todo: Todo) {
     this.delete.emit(todo);
   }
+
   editFunc(todo: Todo) {
     this.edit.emit(todo);
   }
+
   viewFunc(todo: Todo) {
     this.view.emit(todo);
   }
-  actionSheetClickedFunc(todo: Todo) {
-    this.actionSheetClicked.emit(todo);
-  }
-
 }

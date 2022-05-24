@@ -4,8 +4,8 @@
   "peerDependencies": {
     "@angular/common": "^13.2.0",
     "@angular/core": "^13.2.0",
-    "app-base-lib": "^1.0.38",
-    "vicky-ionic-ng-lib": "^0.0.30"
+    "app-base-lib": "^1.0.44",
+    "vicky-ionic-ng-lib": "^0.0.33"
   },
   "dependencies": {
     "@angular/router": "^13.3.6",

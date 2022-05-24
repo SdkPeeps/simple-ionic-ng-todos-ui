@@ -14,34 +14,35 @@
 <ion-content >
 
   <form [formGroup]="todoForm">
-  <ion-list>
-    <ion-item>
-      <ion-input #title placeholder="Enter Todo Title" class="form-control ion-text-center todos-ui-input"
-       formControlName="title">
-      </ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-input #description placeholder="Enter Todo Description" class="form-control ion-text-center todos-ui-input"
-       formControlName="description">
-      </ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox #status class="form-control ion-text-center todos-ui-checkbox"
-       formControlName="status">
-      </ion-checkbox>
-    </ion-item>
-    <div *ngIf="msg?.['title']?.touched && msg?.['title']?.invalid" style="color: red; padding-left: 5px;">
-      <p *ngIf="msg?.['title']?.errors?.['required']">{{validationMsg1}}</p>
-    </div>
-    <div *ngIf="msg?.['description']?.touched && msg?.['description']?.invalid" style="color: red; padding-left: 5px;">
-      <p *ngIf="msg?.['description']?.errors?.['required']">{{validationMsg2}}</p>
-    </div>
-  </ion-list>
-</form>
+    <ion-list>
+      <ion-item>
+        <ion-input #title placeholder="Enter Todo Title" class="form-control ion-text-center todos-ui-input"
+        formControlName="title">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input #description placeholder="Enter Todo Description" class="form-control ion-text-center todos-ui-input"
+        formControlName="description">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-checkbox #status class="form-control ion-text-center todos-ui-checkbox"
+        formControlName="status">
+        </ion-checkbox>
+      </ion-item>
+      <div *ngIf="todoForm.controls?.['title']?.touched && todoForm.controls?.['title']?.invalid" style="color: red; padding-left: 5px;">
+        <p *ngIf="todoForm.controls?.['title']?.errors?.['required']">{{validationMsg1}}</p>
+      </div>
+      <div *ngIf="todoForm.controls?.['description']?.touched && todoForm.controls?.['description']?.invalid" style="color: red; padding-left: 5px;">
+        <p *ngIf="todoForm.controls?.['description']?.errors?.['required']">{{validationMsg2}}</p>
+      </div>
+    </ion-list>
+  </form>
 
   <ng-container *ngIf="btnPosition === position.IN_CONTENT">
     <ng-container [ngTemplateOutlet]="pageButtons"></ng-container>
   </ng-container>
+  
 </ion-content>
 
 <ion-footer *ngIf="btnPosition === position.IN_FOOTER">
@@ -53,11 +54,11 @@
 <ng-template #pageButtons>
   <ion-grid>
     <ion-row [ngClass]="{'ion-justify-content-end':btnPosition === position.IN_FOOTER}">
-      <ng-container >
+      <ng-container>
         <ion-col [size]="btnPosition === position.IN_FOOTER ? 'auto' : '12'">
           <ion-button class="todos-ui-button" [expand]="btnPosition === position.IN_CONTENT?'block':undefined" color="primary" [disabled]="!todoForm.valid" (click)="next()">{{btnText | titlecase}}</ion-button>
         </ion-col>
-      </ng-container
+      </ng-container>
     </ion-row>
   </ion-grid>
 </ng-template>

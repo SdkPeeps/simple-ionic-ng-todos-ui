@@ -1,5 +1,6 @@
 import { EventEmitter } from '@angular/core';
 import { Component, OnInit, Input, Output } from '@angular/core';
+import {ACTION_SHEET_FUNCTION , ACTION_SHEET_OPTIONS, TOAST_FUNCTION} from 'app-base-lib';
 import { Todo } from '../../abstracts/interfaces/todos.interface';
 
 @Component({
@@ -12,32 +13,82 @@ export class TodosItemComponent implements OnInit {
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
   @Output() view = new EventEmitter<any>();
-  @Output() actionSheetClicked = new EventEmitter<any>();
+
+  @Input() actionSheetFunction!:ACTION_SHEET_FUNCTION;
+
+  @Input() toastFunction!:TOAST_FUNCTION;
 
   @Input()
   todo!: Todo;
-  //Property to confirm if the user has access to delete
 
   @Input() deletable!: boolean;
+
   @Input() editable!: boolean;
 
   constructor() {}
 
   ngOnInit() {
-
   }
 
-  deleteFunc(ev: Event) {
+  private deleteFunc() {
     this.delete.emit();
   }
-  editFunc(ev: Event) {
+
+  private editFunc() {
     this.edit.emit();
   }
-  viewFunc(ev: Event) {
+
+  viewFunc() {
     this.view.emit();
   }
-  actionSheetClickedFunc(ev: Event) {
-    this.actionSheetClicked.emit();
+
+  async sayStatus(){
+    
+    const resp = await this.toastFunction({
+      message:`This todo ${this.todo.completed?'has been completed':'is in progress'}`
+    }).then();
+
+    resp.onEnd.then(()=>{
+    });
+  }
+
+  async presentActionSheet() {
+
+    const buttons:ACTION_SHEET_OPTIONS['buttons'] = [];
+
+    if(this.editable){
+      buttons.push({
+        id: 'edit',
+        label: 'Edit',
+        role:'edit',
+      });
+    }
+    else if(this.deletable){
+      buttons.push({
+        id:'delete',
+        label: 'Delete',
+        role: 'delete',
+      });
+    }
+
+    buttons.push({
+      id:'cancel',
+      label: 'Cancel',
+      role: 'cancel',
+    });
+
+    const resp = await this.actionSheetFunction({
+      buttons
+    });
+
+    resp.onEnd.then((result)=>{
+      if(result.id == 'edit'){
+        this.editFunc();
+      }
+      else if(result.id == 'delete'){
+        this.deleteFunc();
+      }
+    });
   }
 
 }

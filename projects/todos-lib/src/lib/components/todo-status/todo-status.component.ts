@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TodoStatusComponent implements OnInit {
 
+  @Input()
+  todo:Todo;
+
   constructor() { }
 
   ngOnInit(): void {

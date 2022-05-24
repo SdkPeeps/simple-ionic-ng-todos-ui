@@ -43,6 +43,7 @@ export class TodosPage implements OnInit {
    * Stores the title of the page
    */
   public pageTitle!:string;
+
   /**
    * Determines if the page title should be shown
    */
@@ -63,11 +64,10 @@ export class TodosPage implements OnInit {
    */
   public canDelete!: boolean;
 
-     /**
+  /**
    * Determines if user have edit permission
    */
-      // public canEdit!: boolean;
-
+  public canEdit!: boolean;
 
    /**
    * Manages how the todos are loaded to the UI
@@ -97,8 +97,6 @@ export class TodosPage implements OnInit {
 
     const thiz = this;
 
-
-    /** This code manages the loading of more todo on the page through pagination*/
     this.listDataBrokerLoadUIManager = new class extends ListDataBrokerLoadUIManager<Todo,Todo,TodosDataBrokerSearchConstraint,TodosDataBrokerEvent>{
       protected getLoaderComponent(): LoaderComponent {
         return thiz.loaderComponent;
@@ -111,19 +109,20 @@ export class TodosPage implements OnInit {
     this.paginatedDataManager = this.listDataBrokerLoadUIManager.getPaginatedDataManager();
   }
 
-
   async ngOnInit(): Promise<void> {
 
-
-    /**Assigning a value as the spinner type. The value is gotten through @Input() or the config file. If no value is set, it will use the fallback label 'Bubbles'
+    /**
+     * Assigning a value as the spinner type. The value is gotten through @Input() or the config file. If no value is set, it will use the fallback label 'Bubbles'
      */
     this.spinnerType = this.config.ui.general.spinner.type || 'bubbles';
 
-    /**The add button is shown if the user have create permission
+    /**
+     * The add button is shown if the user have create permission
      */
     this.showAddBtn = await this.todosDataBroker.canCRUD(CRUD.CREATE);
 
-    /**Delete button is shown if the user have delete permission
+    /**
+     * Delete button is shown if the user have delete permission
      */
     this.canDelete = await this.todosDataBroker.canCRUD(CRUD.DELETE);
     // this.canEdit = await this.todosDataBroker.canCRUD(CRUD.EDIT);
@@ -136,12 +135,6 @@ export class TodosPage implements OnInit {
     this.showTitle = !config.ui.pages.todos.title.invisible;
   }
 
-  //Ation Sheet
-  async showActionSheet(todo: Todo) {
-    await this.presentActionSheet(todo);
-  }
-
-  /**Method creates a new todo. The logic is gotten from the data broker */
   async addNewTodo() {
 
     const afterCreateSubject = new Subject<Todo>();
@@ -199,11 +192,10 @@ export class TodosPage implements OnInit {
         }
       }
     });
-
   }
 
-  /**Method deletes a Todo. The logic is gotten from the data broker */
   async delete(todo:Todo){
+
     console.log('TodosPage.delete() :',todo);
 
     await this.presentAlertConfirm();
@@ -278,6 +270,7 @@ export class TodosPage implements OnInit {
             });
           });
         },
+
         //progress message shown while the link is being created
         messages:{
           failure: todosConfig.crud?.update?.messages?.failure || 'Oops something went wrong, pls try again'
@@ -301,17 +294,15 @@ export class TodosPage implements OnInit {
         }
       }
     });
+  }
 
+  onLoaderStateChange(s: any){
+    const state = s as unknown as LOADER_STATE;
+    console.log(s + ' as ' + state);
+    if( state == LOADER_STATE.LOADING ){
+      this.loadInitial();
     }
-
-      /**Method creates a new todo. The logic is gotten from the data broker */
-      onLoaderStateChange(s: any){
-        const state = s as unknown as LOADER_STATE;
-        console.log(s + ' as ' + state)
-      if( state == LOADER_STATE.LOADING ){
-        this.loadInitial();
-      }
-    }
+  }
 
   private async loadInitial(){
     this.listDataBrokerLoadUIManager.handleLoader(this.loaderComponent).subscribe((todos:Todo[])=>{
@@ -343,70 +334,6 @@ export class TodosPage implements OnInit {
       console.log('todosDetailEditorPage.refresh() error :',err);
     });
   }
-  //Alert to confirm if the user really wants to delete a todo
-  async presentAlertConfirm() {
-    const alert = await this.alertController.create({
-      message: 'Are you sure you want to delete this todo?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          id: 'cancel-button'
-        }, {
-          text: 'Yes',
-          id: 'confirm-button',
-          role:'success'
-        }
-      ]
-    });
-
-    await alert.present();
-
-    const result = await alert.onDidDismiss();
-
-    if( result.role == 'success' ){
-      return Promise.resolve();
-    }
-
-    return Promise.reject();
-  }
-
-  async presentActionSheet(todo: Todo) {
-    const actionSheet = await this.actionSheetController.create({
-      buttons: [ {
-        text: 'Edit',
-        icon: 'edit',
-        handler: () => {
-          this.edit(todo);
-          console.log('Edit clicked');
-        }
-      },{
-        text: 'Delete',
-        role: 'destructive',
-        icon: 'trash',
-        id: 'delete-button',
-        data: {
-          type: 'delete'
-        },
-        handler: () => {
-          this.delete(todo);
-          console.log('Delete clicked');
-        }
-      }, {
-        text: 'Cancel',
-        icon: 'close',
-        role: 'cancel',
-        handler: () => {
-          console.log('Cancel clicked');
-        }
-      }]
-    });
-    await actionSheet.present();
-
-    const { role, data } = await actionSheet.onDidDismiss();
-    console.log('onDidDismiss resolved with role and data', role, data);
-  }
-
 }
 
 

@@ -1,7 +1,7 @@
 .complete-color {
-  color: green;
+  color: var(--todos-ui-status-complete-color);
 }
 
-.in-complete-color {
-   color: red;
- }
+.in-progress-color {
+  color: var(--todos-ui-status-in-progress-color);
+}
