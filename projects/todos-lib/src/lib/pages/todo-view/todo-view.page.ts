@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Todo } from '../../abstracts/interfaces/todos.interface';
 import { NavController, SpinnerTypes } from '@ionic/angular';
 import { TodosDataBroker } from '../../abstracts/interfaces/todos-data-broker';
 import { TodosDataBrokerServiceToken, TodosDataBrokerConfig } from '../../abstracts/interfaces/todos-data-broker-config.interface';
 import { Inject } from '@angular/core';
-import { DataContextUiLoaderComponent, LOADER_STATE } from 'vicky-ionic-ng-lib';
+import { DataCtxUILoaderComponent, DataCtxUILoaderDataChangeEvent, DataCtxUILoaderIDConfig, DataCtxUILoaderStreamFunction, LOADER_STATE } from 'vicky-ionic-ng-lib';
 import { ID } from 'app-base-lib';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-todo-view',
@@ -16,6 +17,8 @@ import { ID } from 'app-base-lib';
 export class TodoViewPage implements OnInit {
 
   loaderInitialData:Todo;
+
+  @Input() emptyMsg!: string;
 
   todo!:Todo;
 
@@ -31,16 +34,16 @@ export class TodoViewPage implements OnInit {
    */
   public showTitle!:boolean;
 
-  @ViewChild(DataContextUiLoaderComponent,{static:true})
-  private dataContextUILoaderComponent!:DataContextUiLoaderComponent;
+  @ViewChild(DataCtxUILoaderComponent,{static:true})
+  private dataCtxUILoaderComponent!:DataCtxUILoaderComponent;
 
   public spinnerType!: SpinnerTypes;
 
-  private streamFunction:DataContextUILoaderStreamFunction;
+  private streamFunction!:DataCtxUILoaderStreamFunction<Todo>;
 
-  loaderState:LOADER_STATE;
+  loaderState!:LOADER_STATE;
 
-  idConfig:DataCtxUILoaderIDConfig;
+  idConfig!:DataCtxUILoaderIDConfig;
 
   constructor( @Inject(TodosDataBrokerServiceToken)
   private todosDataBroker:TodosDataBroker,private router:Router,private activatedRoute: ActivatedRoute,private navCtrl:NavController) {
@@ -52,7 +55,12 @@ export class TodoViewPage implements OnInit {
   ngOnInit() {
 
     this.streamFunction = ( id:ID )=>{
-      -;
+      return this.todosDataBroker.streamOne({id}).pipe(map(update => {
+        const result = {
+          data:update.data
+        };
+        return result;
+      }));
     };
 
     this.spinnerType = this.config.ui.general.spinner.type || 'bubbles';
@@ -64,7 +72,7 @@ export class TodoViewPage implements OnInit {
 
   /**Method creates a new todo. The logic is gotten from the data broker */
   onLoaderStateChange(state: LOADER_STATE){
-    console.log(s + ' as ' + state)
+    console.log('s' + ' as ' + state)
   }
 
   onFatalError(){

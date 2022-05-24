@@ -13,6 +13,5 @@ export class TodosService {
 
   constructor(@Inject(TodosDataBrokerServiceToken) private todosDataBroker:TodosDataBroker) {
     this.config = this.todosDataBroker.getConfig();
-    this.defaultFavicon = this.config.ui.general.custom?.defaultFavicon || "assets/default-todo-ui-favicon.png";
   }
 }

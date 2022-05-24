@@ -14,6 +14,8 @@ export class TodosItemComponent implements OnInit {
   @Output() delete = new EventEmitter<any>();
   @Output() view = new EventEmitter<any>();
 
+  @Input() actionSheetTitle!:string;
+
   @Input() actionSheetFunction!:ACTION_SHEET_FUNCTION;
 
   @Input() toastFunction!:TOAST_FUNCTION;
@@ -78,6 +80,7 @@ export class TodosItemComponent implements OnInit {
     });
 
     const resp = await this.actionSheetFunction({
+      title:this.actionSheetTitle,
       buttons
     });
 

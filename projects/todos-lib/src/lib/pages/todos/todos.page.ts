@@ -179,7 +179,7 @@ export class TodosPage implements OnInit {
           progress:{
             title: 'Please wait...',
             // spinner: this.config.spinner.type || 'bubbles',
-            message: this.config.ui.pages.todos.behavior.todoInfo.progressMsg ||'Creating your todo',
+            message: 'Creating your todo', //ask question
           },
         },
                 //progress message shown after the todo has been created
@@ -198,7 +198,7 @@ export class TodosPage implements OnInit {
 
     console.log('TodosPage.delete() :',todo);
 
-    await this.presentAlertConfirm();
+    //await this.presentAlertConfirm();
 
     const todosConfig = this.config.ui.pages.todos;
     const afterDeleteSubject = new Subject<Todo>();

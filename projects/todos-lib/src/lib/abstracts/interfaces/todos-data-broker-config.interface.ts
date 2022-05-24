@@ -1,8 +1,8 @@
 import { InjectionToken } from '@angular/core';
 import { TodosDataBroker } from './todos-data-broker';
-import {IonUIDataBrokerConfig,IonUIDataBrokerUIPageConfig} from "vicky-ionic-ng-lib";
+import {IonListUIDataBrokerConfig,IonUIDataBrokerUIPageConfig, IonUIDataBrokerUIPageCrudMsgsConfig} from "vicky-ionic-ng-lib";
 
-export type TodosDataBrokerConfig = IonUIDataBrokerConfig & {
+export type TodosDataBrokerConfig = IonListUIDataBrokerConfig & {
 
   ui:{
 
@@ -18,14 +18,14 @@ export type TodosDataBrokerConfig = IonUIDataBrokerConfig & {
      * contains all the properties related to the pages
      */
     pages:{
-        
+
       /**
        * contains the properties related to the todos page
        */
-      todos:IonUIDataBrokerUIPageConfig,
+      todos:IonUIDataBrokerUIPageConfig & IonUIDataBrokerUIPageCrudMsgsConfig,
 
       todosViewsPage:IonUIDataBrokerUIPageConfig,
-        
+
       /**
        * @todosDetailEditor property contains all the properties related to the Todos Details Editor's page it has similar properties as the Todos page
        */
@@ -35,7 +35,7 @@ export type TodosDataBrokerConfig = IonUIDataBrokerConfig & {
        * @buttons contains the properties that stores the label for the buttons on the todos-details-page
        */
         buttons:{
-          
+
           main:{
         /**
          * This property stores the label/text of the button that takes the user to a previous action
