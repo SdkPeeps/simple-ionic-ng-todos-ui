@@ -30,7 +30,7 @@ export class TodoViewPage implements OnInit {
    * Determines if the page title should be shown
    */
   public showTitle!:boolean;
-  
+
   @ViewChild(DataContextUiLoaderComponent,{static:true})
   private dataContextUILoaderComponent!:DataContextUiLoaderComponent;
 
@@ -71,7 +71,7 @@ export class TodoViewPage implements OnInit {
 
     // show exit error toast
     this.todosDataBroker.showToast({
-      message: this.config.ui.pages.todosViewsPage.behavior.exit?.crash?.message || 'Oops something went wrong. Please try again'
+      message: this.config.ui.pages.todosViewsPage.navigation?.exit?.crash?.message || 'Oops something went wrong. Please try again'
     });
 
     this.navCtrl.pop();

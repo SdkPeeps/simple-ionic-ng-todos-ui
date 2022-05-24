@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Todo } from '../../abstracts/interfaces/todos.interface';
 
 @Component({
   selector: 'todos-ui-todo-status',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class TodoStatusComponent implements OnInit {
 
   @Input()
-  todo:Todo;
+  todo!:Todo;
 
   constructor() { }
 

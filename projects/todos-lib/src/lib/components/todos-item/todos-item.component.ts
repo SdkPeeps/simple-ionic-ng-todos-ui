@@ -43,7 +43,7 @@ export class TodosItemComponent implements OnInit {
   }
 
   async sayStatus(){
-    
+
     const resp = await this.toastFunction({
       message:`This todo ${this.todo.completed?'has been completed':'is in progress'}`
     }).then();
@@ -60,7 +60,7 @@ export class TodosItemComponent implements OnInit {
       buttons.push({
         id: 'edit',
         label: 'Edit',
-        role:'edit',
+        role:'update',
       });
     }
     else if(this.deletable){

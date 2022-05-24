@@ -21,7 +21,7 @@ import { TodosListComponent } from '../../components/todos-list/todos-list.compo
     ComponentsModule,
     LoaderComponentModule,
   ],
-  declarations: [TodosPage,TodosListComponent ],
+  declarations: [TodosPage],
   providers:[
     TodosService
   ],

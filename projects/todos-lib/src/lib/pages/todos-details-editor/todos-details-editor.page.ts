@@ -50,15 +50,18 @@ export class TodosDetailsEditorPage implements OnInit {
   @Input() showTitle!: boolean;
 
   //Property that stores the validation message shown if the input field is empty
-  @Input() validationMsg1!: string;
+  @Input() validationMsg1!: any;
 
   //Property that stores the validation message shown if the url entered is not a valid number
-  @Input() validationMsg2!: string;
+  @Input() validationMsg2!: any;
 
   todoForm!: FormGroup;
 
   // getting the availble position for the button. It can either be in the footer or the main page
   position = PAGE_SECTION_POSITION;
+
+  title!: string;
+  description!: string;
 
   constructor(@Inject(TodosDataBrokerServiceToken) private todosDataBroker:TodosDataBroker,public modalCtlr: ModalController,
   private formBuilder: FormBuilder) {
@@ -89,16 +92,22 @@ export class TodosDetailsEditorPage implements OnInit {
     this.btnPosition = this.btnPosition || this.config.ui.general.buttons?.core.sectionPosition || this.position.IN_CONTENT;
 
     //Assigning the first validation message. The value is gotten through @Input() or the config file. If no value is set, it will use the fallback
-    this.validationMsg1 = this.validationMsg1 || this.config.ui.pages.todosDetailEditor.behavior.urlInfo.requiredValidationMsg || 'Field cannot be empty, please enter a title';
+    this.validationMsg1 = this.validationMsg1 || this.config.ui.pages.todosDetailEditor.crud?.create?.input?.validation.message || 'Field cannot be empty, please enter a title';
 
     //Assigning the second validation message. The value is gotten through @Input() or the config file. If no value is set, it will use the fallback
-    this.validationMsg2 = this.validationMsg2 || this.config.ui.pages.todosDetailEditor.behavior.urlInfo.patternValidationMsg || 'Invalid URL format! Pls enter a description';
+    this.validationMsg2 = this.validationMsg2 || this.config.ui.pages.todosDetailEditor.crud?.create?.input?.validation.message|| 'Field cannot be empty, please enter a description';
 
     this.todoForm = this.formBuilder.group({
       //Validating if url format is valid
       title: ['', Validators.required],
       description: ['', Validators.required]
     });
+
+    if(this.mode == CRUD.UPDATE){
+      // path current values
+      this.todoForm.patchValue({title: this.title})
+      this.todoForm.patchValue({description: this.description})
+    }
   }
 
   //This method performs a progress action when a user add a new url

@@ -10,7 +10,7 @@
   <vicky-ionic-ng-data-ctx-ui-loader [initialData]="loaderInitialData" [streamFunction]="streamFunction" [idConfig]="idConfig" [emptyMsg]="emptyMsg" [progressSpinnerType]="spinnerType" (fatalError)="onFatalError($event)" (dataChange)="onDataChange($event)" (loaderStateChange)="onLoaderStateChange($event)">
   </vicky-ionic-ng-data-ctx-ui-loader>
 
-  <ng-container *ngIf="">
+  <ng-container *ngIf="loaderState == LOADER_STATE.LOADED">
 
     <h2>
       {{todo.title}}
