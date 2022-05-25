@@ -35,13 +35,14 @@ export class TodoViewPage implements OnInit {
   public showTitle!:boolean;
 
   @ViewChild(DataCtxUILoaderComponent,{static:true})
-  private dataCtxUILoaderComponent!:DataCtxUILoaderComponent;
+  public dataCtxUILoaderComponent!:DataCtxUILoaderComponent;
 
   public spinnerType!: SpinnerTypes;
 
-  private streamFunction!:DataCtxUILoaderStreamFunction<Todo>;
+  public streamFunction!:DataCtxUILoaderStreamFunction<Todo>;
 
   loaderState!:LOADER_STATE;
+  LOADER_STATE = LOADER_STATE;
 
   idConfig!:DataCtxUILoaderIDConfig;
 

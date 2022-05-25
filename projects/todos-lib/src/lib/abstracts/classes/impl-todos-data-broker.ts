@@ -8,7 +8,7 @@ import { TodosDataBrokerSearchConstraint } from "../interfaces/todos-data-broker
 
 export abstract class ImplTodosDataBroker extends IonListDataBroker<Todo, Todo,TodosDataBrokerSearchConstraint, TodosDataBrokerEvent> implements TodosDataBroker {
 
-  constructor(private platform: Platform, actionSheetController: ActionSheetController,  toastCtrl: ToastController,
+  constructor(actionSheetController: ActionSheetController,  toastCtrl: ToastController,
       alertCtrl: AlertController,
     loadingCtrl: LoadingController ,paginationOptions: {
     perPage: number;

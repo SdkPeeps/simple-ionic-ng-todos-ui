@@ -17,7 +17,7 @@ import { TodoStatusComponent } from './todo-status/todo-status.component';
     IonicModule,
   ],
   exports: [TodosItemComponent,
-    TodosListComponent]
+    TodosListComponent, TodoStatusComponent]
 })
 export class ComponentsModule {
 }

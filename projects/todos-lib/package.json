@@ -5,7 +5,7 @@
     "@angular/common": "^13.2.0",
     "@angular/core": "^13.2.0",
     "app-base-lib": "^1.0.45",
-    "vicky-ionic-ng-lib": "^0.0.35"
+    "vicky-ionic-ng-lib": "^0.0.36"
   },
   "dependencies": {
     "@angular/router": "^13.3.6",

@@ -9,6 +9,7 @@ import { TodoViewPageRoutingModule } from './todo-view-routing.module';
 import { TodoViewPage } from './todo-view.page';
 import { TodoStatusComponent } from '../../components/todo-status/todo-status.component';
 import { DataCtxUILoaderModule } from 'vicky-ionic-ng-lib';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
@@ -16,8 +17,9 @@ import { DataCtxUILoaderModule } from 'vicky-ionic-ng-lib';
     FormsModule,
     IonicModule,
     TodoViewPageRoutingModule,
-    DataCtxUILoaderModule
+    DataCtxUILoaderModule,
+    ComponentsModule
   ],
-  declarations: [TodoViewPage,TodoStatusComponent]
+  declarations: [TodoViewPage]
 })
 export class TodoViewPageModule {}

@@ -8,7 +8,6 @@ import { TodosPageRoutingModule } from './todos-routing.module';
 import { TodosPage } from './todos.page';
 import { ComponentsModule } from '../../components/components.module';
 import { TodosService } from '../../todos.service';
-import { TodosListComponent } from '../../components/todos-list/todos-list.component';
 
 
 @NgModule({

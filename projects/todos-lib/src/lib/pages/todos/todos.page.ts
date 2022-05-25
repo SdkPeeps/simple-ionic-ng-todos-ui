@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { ActionSheetController, ActionSheetOptions, AlertController, InfiniteScrollCustomEvent, IonInfiniteScroll, IonRefresher, ModalController, RefresherCustomEvent, SpinnerTypes } from '@ionic/angular';
 import { TodosDetailsEditorPage } from '../todos-details-editor/todos-details-editor.page';
 import { TodosDataBrokerConfig, TodosDataBrokerServiceToken } from '../../abstracts/interfaces/todos-data-broker-config.interface';
-import { CRUD, RESULT, PaginatedDataManager} from 'app-base-lib';
+import { CRUD, RESULT, PaginatedDataManager, ACTION_SHEET_FUNCTION } from 'app-base-lib';
 import { TodosDataBroker } from '../../abstracts/interfaces/todos-data-broker';
 import { Todo } from '../../abstracts/interfaces/todos.interface';
 import { AfterViewInit } from '@angular/core';
@@ -69,6 +69,8 @@ export class TodosPage implements OnInit {
    */
   public canEdit!: boolean;
 
+  public actionSheetFunction:ACTION_SHEET_FUNCTION;
+
    /**
    * Manages how the todos are loaded to the UI
    */
@@ -94,6 +96,8 @@ export class TodosPage implements OnInit {
     public actionSheetController: ActionSheetController) {
 
     this.config = this.todosDataBroker.getConfig();
+
+    this.actionSheetFunction = this.todosDataBroker.showActionSheet;
 
     const thiz = this;
 

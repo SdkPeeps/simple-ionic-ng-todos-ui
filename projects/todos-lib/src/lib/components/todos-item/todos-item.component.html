@@ -4,7 +4,7 @@
   <ion-label>
     <h4 class="todos-ui-title">{{todo.title}}</h4>
     <!-- The status component -->
-    <todos-ui-todo-status></todos-ui-todo-status>
+    <todos-ui-todo-status [todo]="todo"></todos-ui-todo-status>
   </ion-label>
 
   <ion-buttons slot="end">
